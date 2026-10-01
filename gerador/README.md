@@ -22,7 +22,7 @@ python generate.py                   # geração completa em data/dist/
 python generate.py --from packages   # reaproveita os tiles de data/build/
 python scripts/publish.py            # confere a geração (não publica nada)
 python scripts/publish.py --release  # sobe os pacotes numa release e grava o catalogo.json na raiz
-python scripts/due.py                # a geração publicada já tem 29 dias? (só responde; não gera)
+python scripts/due.py                # está na hora de gerar de novo? (só responde; não gera)
 python -m unittest discover -s tests -t .
 ```
 
@@ -30,10 +30,15 @@ Os testes também rodam no GitHub Actions a cada push e pull request (`.github/w
 pyvalhalla e sem os dados baixados: os 2 testes que dependem deles são pulados, com o motivo no log.
 
 A geração inteira roda no Actions, no workflow `gerar` (`.github/workflows/gerar.yml`), **a cada 29 dias**: ele
-dispara todo dia às 03:00 de Brasília, o job `interval` pergunta ao `scripts/due.py` se a geração publicada
-(`built_at` do `catalogo.json`) já tem 29 dias, e só então o build roda e publica. Se a geração falhar, tenta de
-novo no dia seguinte. Disparado à mão, gera na hora e só publica com `publish` marcado. Num fork, o agendamento não
-gera.
+dispara todo dia às 03:17 e às 09:17 de Brasília, o job `interval` pergunta ao `scripts/due.py` se a geração
+publicada (`built_at` do `catalogo.json`) já tem 29 dias, e só então o build roda e publica. Se a geração falhar, o
+disparo seguinte tenta de novo. São dois horários, fora da hora cheia, porque o GitHub atrasa ou pula disparos
+agendados sem avisar: o segundo cobre o primeiro e, se o primeiro já publicou, só confere a data e para. Disparado à
+mão, gera na hora e só publica com `publish` marcado. Num fork, o agendamento não gera.
+
+Para uma geração fora do intervalo sem disparar à mão, a variável `GENERATE_FROM` do job `interval` marca um dia
+(`AAAA-MM-DD`, UTC): a partir dele, o agendamento gera se a geração publicada for de antes desse dia. Depois de
+publicar, a marca não tem mais efeito, e os 29 dias passam a contar dessa geração.
 
 O job do build libera espaço apagando ferramentas pré-instaladas da máquina, põe os dados e 12 GB de swap no disco
 com mais espaço livre, gera, guarda os logs e as medições (memória, swap e disco a cada 30 s) como artefato e
@@ -70,7 +75,8 @@ Módulos de apoio:
   moto aumentado), que a validação usa.
 - `andorinha/publishing.py`: as travas da publicação (`check`, `drops`); `scripts/publish.py` é só a linha de comando.
 - `andorinha/schedule.py`: a regra do intervalo entre gerações (29 dias, `GENERATION_INTERVAL_DAYS`), contada do
-  `built_at` do `catalogo.json` publicado, em dias arredondados; `scripts/due.py` é só a linha de comando.
+  `built_at` do `catalogo.json` publicado, em dias arredondados, e a geração extra com dia marcado;
+  `scripts/due.py` é só a linha de comando.
 - `andorinha/tiles.py`: a grade de tiles (caminho do arquivo, nível, índice e retângulo).
 - `andorinha/net.py`: downloads que retomam de onde pararam (`Range`), nunca deixam arquivo pela metade com o nome final e só repetem erro passageiro (4xx, fora 408 e 429, falha na hora).
   Corpo comprimido (gzip) é descomprimido ao gravar: o IBGE manda a malha assim para os executores do Actions,

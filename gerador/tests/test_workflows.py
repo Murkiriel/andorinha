@@ -38,8 +38,26 @@ class ScheduledGenerationTest(unittest.TestCase):
         self.interval = job(self.text, "interval")
         self.generate = job(self.text, "generate")
 
-    def test_runs_every_day(self):
-        self.assertRegex(self.text, r'(?m)^  schedule:\n\s+- cron: "0 6 \* \* \*"')
+    def crons(self):
+        return re.findall(r'(?m)^    - cron: "([^"]+)"', self.text)
+
+    def test_runs_twice_a_day(self):
+        """Dois disparos por dia: um disparo que o GitHub pula não avisa ninguém, o segundo cobre o primeiro."""
+        self.assertEqual(["17 6 * * *", "17 12 * * *"], self.crons())
+
+    def test_never_on_the_hour(self):
+        """Na hora cheia o GitHub atrasa ou pula os disparos agendados."""
+        for cron in self.crons():
+            self.assertNotEqual("0", cron.split()[0], cron)
+
+    def test_extra_generation_day_reaches_the_rule(self):
+        self.assertRegex(self.interval, r'(?m)^\s+GENERATE_FROM: "(\d{4}-\d{2}-\d{2})?"')
+        self.assertIn('--generate-from "$GENERATE_FROM"', self.interval)
+
+    def test_published_date_is_the_one_on_the_branch_now(self):
+        """Um run que esperou na fila atrás de outro que publicou lê o catálogo de agora, não o do disparo: sem
+        isso geraria de novo logo depois da publicação."""
+        self.assertRegex(self.interval, r"- uses: actions/checkout@v\d+\n\s+with:\n\s+ref: \$\{\{ github\.ref \}\}\n")
 
     def test_can_still_be_started_by_hand(self):
         self.assertIn("  workflow_dispatch:\n", self.text)
