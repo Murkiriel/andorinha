@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+# downloads, tiles e pacotes do gerador (vários GB): os pacotes vão para as releases, não para o git
+gerador/data/
+# dependências instaladas com pip --target (Pythons sem venv), ver gerador/README.md
+gerador/.pylib/

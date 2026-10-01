@@ -1,0 +1,128 @@
+# Gera uma geração completa (extrato do OpenStreetMap -> tiles do Valhalla -> pacotes -> validação -> catálogo) e
+# publica a release e o catalogo.json pelo scripts/publish.py, com todas as travas dele.
+#
+# A cada 29 dias: todo dia, às 03:00 em Brasília, o job "interval" lê a data da geração publicada (built_at do
+# catalogo.json) e só segue para o build se ela tiver 29 dias ou mais (scripts/due.py). Se a geração falhar, tenta de
+# novo no dia seguinte: a publicada continua com a data velha. Também pode ser disparado à mão (Actions -> gerar ->
+# Run workflow), a qualquer momento; à mão, só publica se "publish" for marcado; sem isso, gera e valida (os logs e as
+# medições ficam nos artefatos).
+#
+# A máquina do Actions é menor que o build pede sem ajuste. Medido numa máquina de 32 GB: pico de RAM de 20,3 GB com
+# 8 threads e 13,4 GB com 2 (a leitura do extrato sozinha passa de 7 GB); 17,5 GB de disco em data/. Por isso o job
+# libera espaço apagando ferramentas pré-instaladas, põe os dados e o swap no disco com mais espaço livre (/ ou o
+# disco temporário em /mnt, quando a máquina tem um) e usa as threads da máquina (2 num repositório privado, 4 num
+# público). Memória, swap e disco são registrados a cada 30 s e vão, com os logs, para os artefatos do job.
+name: gerar
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # todo dia, 03:00 em Brasília (o job "interval" decide se gera)
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publicar a release e o catalogo.json no fim. Sem marcar: só gera e valida."
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: generate
+  cancel-in-progress: false
+
+jobs:
+  interval:
+    # O agendamento só vale no repositório do projeto: um fork não gera sozinho (à mão, gera onde for disparado).
+    if: github.event_name != 'schedule' || github.repository == 'Murkiriel/andorinha'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      run: ${{ steps.age.outputs.run }}
+    steps:
+      # A data vem do catalogo.json do checkout, não de raw.githubusercontent.com: lá um repositório privado
+      # responde 404, a data sumiria e o job geraria todo dia.
+      - uses: actions/checkout@v7
+
+      - name: Idade da geração publicada
+        id: age
+        env:
+          MANUAL: ${{ github.event_name != 'schedule' && '--manual' || '' }}
+        run: python3 gerador/scripts/due.py $MANUAL
+
+  generate:
+    needs: interval
+    if: needs.interval.outputs.run == 'true'
+    # Imagem fixa, não ubuntu-latest: o passo que libera disco e o pyvalhalla fixado só valem para a imagem testada.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      PUBLISH: ${{ github.event_name == 'schedule' || inputs.publish == true }}
+      SWAP_GB: "12"
+      ANDORINHA_MIN_FREE_DISK_GB: "20"
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Liberar disco
+        run: |
+          df -h / /mnt 2>/dev/null || df -h /
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/.ghcup \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost /usr/share/swift
+          sudo docker image prune --all --force > /dev/null || true
+          df -h / /mnt 2>/dev/null || df -h /
+
+      - name: Dados e swap no disco com mais espaço
+        run: |
+          free_gb() { df -BG --output=avail "$1" 2>/dev/null | tail -1 | tr -dc '0-9'; }
+          root=$(free_gb /); mnt=$(free_gb /mnt); mnt=${mnt:-0}
+          if [ "$mnt" -gt "$root" ]; then base=/mnt; else base="$HOME"; fi
+          echo "livre: / ${root} GB, /mnt ${mnt} GB -> dados e swap em ${base}"
+          sudo mkdir -p "$base/andorinha-data" && sudo chown "$USER" "$base/andorinha-data"
+          ln -s "$base/andorinha-data" gerador/data
+          sudo fallocate -l "${SWAP_GB}G" "$base/swap-andorinha"
+          sudo chmod 600 "$base/swap-andorinha"
+          sudo mkswap "$base/swap-andorinha" > /dev/null
+          sudo swapon "$base/swap-andorinha"
+          free -h
+          echo "CPUs: $(nproc)"
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Dependências
+        run: pip install -r gerador/requirements.txt
+
+      - name: Gerar
+        working-directory: gerador
+        run: |
+          ( while true; do
+              echo "$(date -u +%H:%M:%S) $(free -m | awk '/Mem:/{print "ram_used_mb="$3} /Swap:/{print "swap_used_mb="$3}' | tr '\n' ' ') data=$(du -sBG data/ 2>/dev/null | cut -f1)"
+              sleep 30
+            done ) > data/recursos.log 2>&1 &
+          /usr/bin/time -v -o data/tempo.txt python generate.py
+
+      - name: Guardar logs e medições
+        if: always()
+        run: |
+          mkdir -p relatorio
+          cp gerador/data/recursos.log gerador/data/tempo.txt gerador/data/dist/geracao.json gerador/data/dist/catalogo.json relatorio/ 2>/dev/null || true
+          for log in gerador/data/build/*.log; do [ -f "$log" ] && tail -n 3000 "$log" > "relatorio/$(basename "$log")"; done
+          ls -la relatorio
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: relatorio-da-geracao
+          path: relatorio
+          retention-days: 14
+
+      - name: Publicar
+        if: env.PUBLISH == 'true'
+        working-directory: gerador
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python scripts/publish.py --release --commit --push

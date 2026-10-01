@@ -1,0 +1,3 @@
+# Versões fixas. pyvalhalla TEM de ser a versão do Valhalla que vai ler os tiles (andorinha/config.py).
+pyvalhalla==3.6.3
+shapely==2.1.2     # em que UF cai cada tile, pela malha do IBGE

@@ -1,0 +1,579 @@
+{
+  "schema": 1,
+  "build_id": "2026-10-01-161031d6",
+  "built_at": "2026-10-01T12:23:59Z",
+  "valhalla_version": "3.6.3",
+  "generator_commit": "1c2c890",
+  "required_config": {
+    "loki.use_connectivity": false,
+    "service_limits.motorcycle.max_distance": 5000000
+  },
+  "osm": {
+    "timestamp": "2026-10-01T01:02:03Z",
+    "md5": "161031d6d7feb1c731572e877010f1c3",
+    "url": "https://download.openstreetmap.fr/extracts/south-america/brazil-latest.osm.pbf"
+  },
+  "release_url": "https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/",
+  "attribution": "© colaboradores do OpenStreetMap (ODbL 1.0); limites das UFs: IBGE",
+  "base": {
+    "file": "andorinha-base.tar.gz",
+    "sha256": "a52b886e212b791bab13e3693ccdd5eca0794939b15b1a7e362527bda577bfc1",
+    "tiles": 64,
+    "bytes_tiles": 159381616,
+    "bbox": [
+      -33.76,
+      -74.0,
+      5.28,
+      -29.29
+    ],
+    "bbox_tiles": [
+      -34.0,
+      -76.0,
+      6.0,
+      -32.0
+    ],
+    "bytes": 62360249
+  },
+  "states": {
+    "AC": {
+      "name": "Acre",
+      "file": "andorinha-AC.tar.gz",
+      "sha256": "f9550e47cdc4e3710d66df4c82d59b055b473f70ea22f282d7fe98776b640e23",
+      "tiles": 172,
+      "bytes_tiles": 11082136,
+      "bbox": [
+        -11.15,
+        -74.0,
+        -7.11,
+        -66.62
+      ],
+      "bbox_tiles": [
+        -12.0,
+        -74.0,
+        -7.0,
+        -66.0
+      ],
+      "bytes": 4601309
+    },
+    "AL": {
+      "name": "Alagoas",
+      "file": "andorinha-AL.tar.gz",
+      "sha256": "06722fac20f490e9227c9d883663847f58601e2b86cc59eb9c1e8dec4f48fdb3",
+      "tiles": 71,
+      "bytes_tiles": 57640240,
+      "bbox": [
+        -10.5,
+        -38.24,
+        -8.81,
+        -35.15
+      ],
+      "bbox_tiles": [
+        -11.0,
+        -39.0,
+        -8.0,
+        -35.0
+      ],
+      "bytes": 22668318
+    },
+    "AM": {
+      "name": "Amazonas",
+      "file": "andorinha-AM.tar.gz",
+      "sha256": "f37e593a7101853a89daa047c5b52d098772a51d35710065004c6b760f430d2e",
+      "tiles": 801,
+      "bytes_tiles": 32635896,
+      "bbox": [
+        -9.82,
+        -73.81,
+        2.25,
+        -56.09
+      ],
+      "bbox_tiles": [
+        -10.0,
+        -74.0,
+        2.25,
+        -56.0
+      ],
+      "bytes": 12268092
+    },
+    "AP": {
+      "name": "Amapá",
+      "file": "andorinha-AP.tar.gz",
+      "sha256": "760c13b4d12fe2563b3d6075f2a5f8483b5a176d77b2072f39eb822adf2a6b66",
+      "tiles": 111,
+      "bytes_tiles": 5884480,
+      "bbox": [
+        -1.24,
+        -54.88,
+        4.51,
+        -49.87
+      ],
+      "bbox_tiles": [
+        -2.0,
+        -54.75,
+        4.25,
+        -49.75
+      ],
+      "bytes": 2269716
+    },
+    "BA": {
+      "name": "Bahia",
+      "file": "andorinha-BA.tar.gz",
+      "sha256": "a77f983d3b8917a2b76c745a3d680e478af129dbc97ba746a402942e1ed24778",
+      "tiles": 960,
+      "bytes_tiles": 275230376,
+      "bbox": [
+        -18.34,
+        -46.58,
+        -8.53,
+        -37.34
+      ],
+      "bbox_tiles": [
+        -19.0,
+        -47.0,
+        -8.0,
+        -37.0
+      ],
+      "bytes": 113913820
+    },
+    "CE": {
+      "name": "Ceará",
+      "file": "andorinha-CE.tar.gz",
+      "sha256": "6d182a4fc11d5c06e6dc238384fe202950a5eccb5fd99a272a06e7b91a39d5f2",
+      "tiles": 268,
+      "bytes_tiles": 159359768,
+      "bbox": [
+        -7.86,
+        -41.43,
+        -2.78,
+        -37.25
+      ],
+      "bbox_tiles": [
+        -8.0,
+        -42.0,
+        -2.0,
+        -37.0
+      ],
+      "bytes": 62854117
+    },
+    "DF": {
+      "name": "Distrito Federal",
+      "file": "andorinha-DF.tar.gz",
+      "sha256": "ea4074428ff96fa4f20867d1ac0bb4317a67f4fd0c4c1922cf529de74961a958",
+      "tiles": 23,
+      "bytes_tiles": 53852760,
+      "bbox": [
+        -16.05,
+        -48.29,
+        -15.5,
+        -47.3
+      ],
+      "bbox_tiles": [
+        -17.0,
+        -49.0,
+        -15.0,
+        -47.0
+      ],
+      "bytes": 18691418
+    },
+    "ES": {
+      "name": "Espírito Santo",
+      "file": "andorinha-ES.tar.gz",
+      "sha256": "e141203e4e9e6ac3be73c661077abd6eba146f1f7a5d1cdf1dff95d4c562c17b",
+      "tiles": 108,
+      "bytes_tiles": 80674344,
+      "bbox": [
+        -21.31,
+        -41.88,
+        -17.89,
+        -29.29
+      ],
+      "bbox_tiles": [
+        -22.0,
+        -42.0,
+        -17.0,
+        -29.25
+      ],
+      "bytes": 34853148
+    },
+    "GO": {
+      "name": "Goiás",
+      "file": "andorinha-GO.tar.gz",
+      "sha256": "c8c1e4364e91b208f581c88e7cfc6f444cc33c364528cd6d28107df843cbf431",
+      "tiles": 605,
+      "bytes_tiles": 184115208,
+      "bbox": [
+        -19.5,
+        -53.25,
+        -12.39,
+        -45.9
+      ],
+      "bbox_tiles": [
+        -20.0,
+        -54.0,
+        -12.0,
+        -45.0
+      ],
+      "bytes": 68839799
+    },
+    "MA": {
+      "name": "Maranhão",
+      "file": "andorinha-MA.tar.gz",
+      "sha256": "554fb5c3951a422f32caae8ec1f19c95f90b802f62a59140a322e3721959e717",
+      "tiles": 573,
+      "bytes_tiles": 100460936,
+      "bbox": [
+        -10.26,
+        -48.76,
+        -1.04,
+        -41.79
+      ],
+      "bbox_tiles": [
+        -11.0,
+        -49.0,
+        -1.0,
+        -41.0
+      ],
+      "bytes": 40316776
+    },
+    "MG": {
+      "name": "Minas Gerais",
+      "file": "andorinha-MG.tar.gz",
+      "sha256": "85c935d2205fdcf58a693bf251395dec037e789f8970b7be5f87934f6374c5db",
+      "tiles": 1006,
+      "bytes_tiles": 487392656,
+      "bbox": [
+        -22.93,
+        -51.05,
+        -14.23,
+        -39.85
+      ],
+      "bbox_tiles": [
+        -23.0,
+        -52.0,
+        -14.0,
+        -39.0
+      ],
+      "bytes": 204418910
+    },
+    "MS": {
+      "name": "Mato Grosso do Sul",
+      "file": "andorinha-MS.tar.gz",
+      "sha256": "13a6c30d784454d31a120e7fb1d616318337d0d0d7c8e63ddc7ffe64d9c3c3ac",
+      "tiles": 634,
+      "bytes_tiles": 73928824,
+      "bbox": [
+        -24.07,
+        -58.17,
+        -17.16,
+        -50.92
+      ],
+      "bbox_tiles": [
+        -25.0,
+        -59.0,
+        -17.0,
+        -50.0
+      ],
+      "bytes": 27800571
+    },
+    "MT": {
+      "name": "Mato Grosso",
+      "file": "andorinha-MT.tar.gz",
+      "sha256": "061c8ee87d7ab4c273ba9a6ff326bf477ef9afe4824e105fe21f23c857bd77d9",
+      "tiles": 1351,
+      "bytes_tiles": 90961080,
+      "bbox": [
+        -18.05,
+        -61.64,
+        -7.34,
+        -50.22
+      ],
+      "bbox_tiles": [
+        -19.0,
+        -62.0,
+        -7.25,
+        -50.0
+      ],
+      "bytes": 35613725
+    },
+    "PA": {
+      "name": "Pará",
+      "file": "andorinha-PA.tar.gz",
+      "sha256": "62fb1a838f3b15e0c220cf9ff7fd89dbafe0eb191fa8a73842e978f8c2d0001d",
+      "tiles": 1224,
+      "bytes_tiles": 90359608,
+      "bbox": [
+        -9.85,
+        -58.9,
+        2.6,
+        -46.06
+      ],
+      "bbox_tiles": [
+        -10.0,
+        -58.75,
+        2.5,
+        -46.0
+      ],
+      "bytes": 36887057
+    },
+    "PB": {
+      "name": "Paraíba",
+      "file": "andorinha-PB.tar.gz",
+      "sha256": "6c04433543d764589b724c44402be2eb3b99027285873afaf67920927c2e2d69",
+      "tiles": 136,
+      "bytes_tiles": 110368528,
+      "bbox": [
+        -8.31,
+        -38.77,
+        -6.02,
+        -34.79
+      ],
+      "bbox_tiles": [
+        -9.0,
+        -39.0,
+        -5.0,
+        -34.0
+      ],
+      "bytes": 44620490
+    },
+    "PE": {
+      "name": "Pernambuco",
+      "file": "andorinha-PE.tar.gz",
+      "sha256": "005c8141a303bf9df0a8bc37ad8e4e3862a50641f542d8156af667c4a3cabb97",
+      "tiles": 218,
+      "bytes_tiles": 179718408,
+      "bbox": [
+        -9.49,
+        -41.36,
+        -3.83,
+        -32.39
+      ],
+      "bbox_tiles": [
+        -10.0,
+        -42.0,
+        -3.0,
+        -32.0
+      ],
+      "bytes": 71221737
+    },
+    "PI": {
+      "name": "Piauí",
+      "file": "andorinha-PI.tar.gz",
+      "sha256": "27f01300cfa789e114a645b4fb4c8875a12a4699341ee916403681b8044bc4c0",
+      "tiles": 450,
+      "bytes_tiles": 87362768,
+      "bbox": [
+        -10.93,
+        -46.03,
+        -2.74,
+        -40.37
+      ],
+      "bbox_tiles": [
+        -11.0,
+        -47.0,
+        -2.0,
+        -40.0
+      ],
+      "bytes": 35770301
+    },
+    "PR": {
+      "name": "Paraná",
+      "file": "andorinha-PR.tar.gz",
+      "sha256": "fcbf29890203005f59f8fbe24cf06d032fcc0678692d48c2738ad90da9c67fb0",
+      "tiles": 380,
+      "bytes_tiles": 264912088,
+      "bbox": [
+        -26.72,
+        -54.62,
+        -22.51,
+        -48.02
+      ],
+      "bbox_tiles": [
+        -27.0,
+        -55.0,
+        -22.0,
+        -47.0
+      ],
+      "bytes": 102146076
+    },
+    "RJ": {
+      "name": "Rio de Janeiro",
+      "file": "andorinha-RJ.tar.gz",
+      "sha256": "c3112a008c52a7900fc97c9a292c542e0def5664bd615e1a2ae2708f23355775",
+      "tiles": 117,
+      "bytes_tiles": 152093328,
+      "bbox": [
+        -23.37,
+        -44.89,
+        -20.76,
+        -40.95
+      ],
+      "bbox_tiles": [
+        -24.0,
+        -45.0,
+        -20.0,
+        -40.0
+      ],
+      "bytes": 59257417
+    },
+    "RN": {
+      "name": "Rio Grande do Norte",
+      "file": "andorinha-RN.tar.gz",
+      "sha256": "334039eff8e408039968e2e774e0d07ae34dad132c8a8861c6524e31260394ce",
+      "tiles": 119,
+      "bytes_tiles": 74299544,
+      "bbox": [
+        -6.99,
+        -38.59,
+        -4.83,
+        -34.96
+      ],
+      "bbox_tiles": [
+        -8.0,
+        -39.0,
+        -4.0,
+        -34.0
+      ],
+      "bytes": 28866218
+    },
+    "RO": {
+      "name": "Rondônia",
+      "file": "andorinha-RO.tar.gz",
+      "sha256": "ca5f77d258b4dc476ec7b32f1292a924274efb45c0c91fb5337a089eea242109",
+      "tiles": 351,
+      "bytes_tiles": 27727040,
+      "bbox": [
+        -13.7,
+        -66.82,
+        -7.97,
+        -59.77
+      ],
+      "bbox_tiles": [
+        -14.0,
+        -67.0,
+        -7.0,
+        -59.0
+      ],
+      "bytes": 11042815
+    },
+    "RR": {
+      "name": "Roraima",
+      "file": "andorinha-RR.tar.gz",
+      "sha256": "5efc1a1ac0a30e8e544b60996106a8ab587b6995c9c52375719c855194d7aaa3",
+      "tiles": 236,
+      "bytes_tiles": 10760008,
+      "bbox": [
+        -1.59,
+        -64.83,
+        5.28,
+        -58.88
+      ],
+      "bbox_tiles": [
+        -1.75,
+        -64.75,
+        5.5,
+        -59.0
+      ],
+      "bytes": 4336183
+    },
+    "RS": {
+      "name": "Rio Grande do Sul",
+      "file": "andorinha-RS.tar.gz",
+      "sha256": "c0a7c08bfcbb333d93b409ae52d5f5dfbef51cf6e4623a4615ffd9712a7210da",
+      "tiles": 538,
+      "bytes_tiles": 228840504,
+      "bbox": [
+        -33.76,
+        -57.65,
+        -27.08,
+        -49.69
+      ],
+      "bbox_tiles": [
+        -34.0,
+        -58.0,
+        -27.0,
+        -49.0
+      ],
+      "bytes": 90005525
+    },
+    "SC": {
+      "name": "Santa Catarina",
+      "file": "andorinha-SC.tar.gz",
+      "sha256": "5eb790197969c0e20ce836df5f4815e4a03e1509e5e1c7e4410f085ae621a074",
+      "tiles": 223,
+      "bytes_tiles": 191062904,
+      "bbox": [
+        -29.36,
+        -53.84,
+        -25.95,
+        -48.35
+      ],
+      "bbox_tiles": [
+        -30.0,
+        -54.0,
+        -25.0,
+        -48.0
+      ],
+      "bytes": 76543716
+    },
+    "SE": {
+      "name": "Sergipe",
+      "file": "andorinha-SE.tar.gz",
+      "sha256": "1a6fcf4f14944f54483be2b13265b3afb6340fc0d46aa4e845b7f0678059b0ff",
+      "tiles": 62,
+      "bytes_tiles": 44619216,
+      "bbox": [
+        -11.57,
+        -38.25,
+        -9.51,
+        -36.39
+      ],
+      "bbox_tiles": [
+        -12.0,
+        -39.0,
+        -9.0,
+        -36.0
+      ],
+      "bytes": 17828721
+    },
+    "SP": {
+      "name": "São Paulo",
+      "file": "andorinha-SP.tar.gz",
+      "sha256": "881a26a58f7f5ab971e5f63e0139ca2a3305064e2f57ded3675c9525505ae283",
+      "tiles": 476,
+      "bytes_tiles": 576051392,
+      "bbox": [
+        -25.31,
+        -53.12,
+        -19.77,
+        -44.16
+      ],
+      "bbox_tiles": [
+        -26.0,
+        -54.0,
+        -19.0,
+        -44.0
+      ],
+      "bytes": 216300810
+    },
+    "TO": {
+      "name": "Tocantins",
+      "file": "andorinha-TO.tar.gz",
+      "sha256": "fb1db5dcc6851f08d804a0b5ae7e9109e8c88990c63c14e965e49d5523d0b3de",
+      "tiles": 490,
+      "bytes_tiles": 49599944,
+      "bbox": [
+        -13.47,
+        -50.75,
+        -5.16,
+        -45.69
+      ],
+      "bbox_tiles": [
+        -14.0,
+        -51.0,
+        -5.0,
+        -45.0
+      ],
+      "bytes": 20850342
+    }
+  }
+}

@@ -1,0 +1,27 @@
+# Testes do gerador a cada push e pull request. Só os testes: nada de gerar tiles nem publicar aqui (isso é o
+# workflow gerar, que prepara a máquina para o build do Brasil). Sem o pyvalhalla e sem os dados baixados, os testes
+# que dependem deles são pulados com o motivo no log.
+name: testes
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: gerador
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Dependências dos testes
+        run: pip install shapely==2.1.2
+      - name: Testes
+        run: python -m unittest discover -s tests -t . -v
