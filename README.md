@@ -17,38 +17,38 @@ resultado.
 ## Baixar por estado
 
 <!-- downloads:start -->
-Geração **2026-10-01-161031d6**: OpenStreetMap de 2026-10-01, Valhalla 3.6.3. Baixe sempre a base e os estados por onde vai rodar; confira o sha256 pelo [`catalogo.json`](catalogo.json).
+Geração **2026-10-02-161031d6**: OpenStreetMap de 2026-10-01, Valhalla 3.6.3. Baixe sempre a base e os estados por onde vai rodar; confira o sha256 pelo [`catalogo.json`](catalogo.json).
 
 | Pacote | Arquivo | Tamanho |
 |---|---|---:|
-| **Base** (rodovias do Brasil, sempre necessária) | [andorinha-base.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-base.tar.gz) | 62,4 MB |
-| Acre (AC) | [andorinha-AC.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-AC.tar.gz) | 4,6 MB |
-| Alagoas (AL) | [andorinha-AL.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-AL.tar.gz) | 22,7 MB |
-| Amapá (AP) | [andorinha-AP.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-AP.tar.gz) | 2,3 MB |
-| Amazonas (AM) | [andorinha-AM.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-AM.tar.gz) | 12,3 MB |
-| Bahia (BA) | [andorinha-BA.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-BA.tar.gz) | 113,9 MB |
-| Ceará (CE) | [andorinha-CE.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-CE.tar.gz) | 62,9 MB |
-| Distrito Federal (DF) | [andorinha-DF.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-DF.tar.gz) | 18,7 MB |
-| Espírito Santo (ES) | [andorinha-ES.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-ES.tar.gz) | 34,9 MB |
-| Goiás (GO) | [andorinha-GO.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-GO.tar.gz) | 68,8 MB |
-| Maranhão (MA) | [andorinha-MA.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-MA.tar.gz) | 40,3 MB |
-| Mato Grosso (MT) | [andorinha-MT.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-MT.tar.gz) | 35,6 MB |
-| Mato Grosso do Sul (MS) | [andorinha-MS.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-MS.tar.gz) | 27,8 MB |
-| Minas Gerais (MG) | [andorinha-MG.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-MG.tar.gz) | 204,4 MB |
-| Pará (PA) | [andorinha-PA.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-PA.tar.gz) | 36,9 MB |
-| Paraíba (PB) | [andorinha-PB.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-PB.tar.gz) | 44,6 MB |
-| Paraná (PR) | [andorinha-PR.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-PR.tar.gz) | 102,1 MB |
-| Pernambuco (PE) | [andorinha-PE.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-PE.tar.gz) | 71,2 MB |
-| Piauí (PI) | [andorinha-PI.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-PI.tar.gz) | 35,8 MB |
-| Rio Grande do Norte (RN) | [andorinha-RN.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-RN.tar.gz) | 28,9 MB |
-| Rio Grande do Sul (RS) | [andorinha-RS.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-RS.tar.gz) | 90,0 MB |
-| Rio de Janeiro (RJ) | [andorinha-RJ.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-RJ.tar.gz) | 59,3 MB |
-| Rondônia (RO) | [andorinha-RO.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-RO.tar.gz) | 11,0 MB |
-| Roraima (RR) | [andorinha-RR.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-RR.tar.gz) | 4,3 MB |
-| Santa Catarina (SC) | [andorinha-SC.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-SC.tar.gz) | 76,5 MB |
-| São Paulo (SP) | [andorinha-SP.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-SP.tar.gz) | 216,3 MB |
-| Sergipe (SE) | [andorinha-SE.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-SE.tar.gz) | 17,8 MB |
-| Tocantins (TO) | [andorinha-TO.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-01-161031d6/andorinha-TO.tar.gz) | 20,9 MB |
+| **Base** (rodovias do Brasil, sempre necessária) | [andorinha-base.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-base.tar.gz) | 62,4 MB |
+| Acre (AC) | [andorinha-AC.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-AC.tar.gz) | 4,6 MB |
+| Alagoas (AL) | [andorinha-AL.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-AL.tar.gz) | 22,7 MB |
+| Amapá (AP) | [andorinha-AP.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-AP.tar.gz) | 2,3 MB |
+| Amazonas (AM) | [andorinha-AM.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-AM.tar.gz) | 12,3 MB |
+| Bahia (BA) | [andorinha-BA.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-BA.tar.gz) | 113,9 MB |
+| Ceará (CE) | [andorinha-CE.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-CE.tar.gz) | 62,9 MB |
+| Distrito Federal (DF) | [andorinha-DF.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-DF.tar.gz) | 18,7 MB |
+| Espírito Santo (ES) | [andorinha-ES.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-ES.tar.gz) | 34,9 MB |
+| Goiás (GO) | [andorinha-GO.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-GO.tar.gz) | 68,8 MB |
+| Maranhão (MA) | [andorinha-MA.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-MA.tar.gz) | 40,3 MB |
+| Mato Grosso (MT) | [andorinha-MT.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-MT.tar.gz) | 35,6 MB |
+| Mato Grosso do Sul (MS) | [andorinha-MS.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-MS.tar.gz) | 27,8 MB |
+| Minas Gerais (MG) | [andorinha-MG.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-MG.tar.gz) | 204,4 MB |
+| Pará (PA) | [andorinha-PA.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-PA.tar.gz) | 36,9 MB |
+| Paraíba (PB) | [andorinha-PB.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-PB.tar.gz) | 44,6 MB |
+| Paraná (PR) | [andorinha-PR.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-PR.tar.gz) | 102,1 MB |
+| Pernambuco (PE) | [andorinha-PE.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-PE.tar.gz) | 71,2 MB |
+| Piauí (PI) | [andorinha-PI.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-PI.tar.gz) | 35,8 MB |
+| Rio Grande do Norte (RN) | [andorinha-RN.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-RN.tar.gz) | 28,9 MB |
+| Rio Grande do Sul (RS) | [andorinha-RS.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-RS.tar.gz) | 90,0 MB |
+| Rio de Janeiro (RJ) | [andorinha-RJ.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-RJ.tar.gz) | 59,3 MB |
+| Rondônia (RO) | [andorinha-RO.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-RO.tar.gz) | 11,0 MB |
+| Roraima (RR) | [andorinha-RR.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-RR.tar.gz) | 4,3 MB |
+| Santa Catarina (SC) | [andorinha-SC.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-SC.tar.gz) | 76,5 MB |
+| São Paulo (SP) | [andorinha-SP.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-SP.tar.gz) | 216,3 MB |
+| Sergipe (SE) | [andorinha-SE.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-SE.tar.gz) | 17,8 MB |
+| Tocantins (TO) | [andorinha-TO.tar.gz](https://github.com/Murkiriel/andorinha/releases/download/2026-10-02-161031d6/andorinha-TO.tar.gz) | 20,8 MB |
 <!-- downloads:end -->
 
 ## Compatibilidade
