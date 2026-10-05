@@ -8,7 +8,7 @@ import time
 from pathlib import Path
 from typing import Optional
 
-from . import config, engine
+from . import config, engine, timezones
 
 
 def check_disk_space(folder: Path, minimum: int = config.MIN_FREE_DISK_BYTES, free: Optional[int] = None) -> None:
@@ -34,7 +34,8 @@ def build(pbf: Path) -> Path:
     if admins.exists():
         admins.unlink()
     config_file = config.BUILD / "valhalla_build.json"
-    config_file.write_text(json.dumps(engine.config_build(tiles_dir, admins), indent=2))
+    zones = timezones.build(config.BUILD / "timezones.sqlite")
+    config_file.write_text(json.dumps(engine.config_build(tiles_dir, admins, zones), indent=2))
 
     for name, extra in (("valhalla_build_admins", []), ("valhalla_build_tiles", ["-j", str(config.THREADS)])):
         t0 = time.time()

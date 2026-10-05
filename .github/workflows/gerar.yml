@@ -103,7 +103,10 @@ jobs:
           python-version: "3.12"
 
       - name: Dependências
-        run: pip install -r gerador/requirements.txt
+        run: |
+          # SpatiaLite para o banco de fusos horários dos tiles (gerador/andorinha/timezones.py)
+          sudo apt-get update -q && sudo apt-get install -y -q libsqlite3-mod-spatialite
+          pip install -r gerador/requirements.txt
 
       - name: Gerar
         working-directory: gerador

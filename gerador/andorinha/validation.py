@@ -22,7 +22,7 @@ import tempfile
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
 from . import engine
 
@@ -93,6 +93,26 @@ ROUTES: List[RouteCheck] = STATE_ROUTES + [
 ] + PROFILE_ROUTES
 
 
+# Rota curta em Brasília com hora de partida: com os fusos nos tiles, cada ponto da resposta vem com o fuso.
+TIMEZONE_ROUTE = ((-15.80, -47.90), (-15.794, -47.894))
+TIMEZONE_EXPECTED = "America/Sao_Paulo"
+
+
+def timezone_request() -> dict:
+    """Uma rota de moto em Brasília com `date_time` (partida às 08:00 de um dia fixo)."""
+    return {"locations": [{"lat": la, "lon": lo} for la, lo in TIMEZONE_ROUTE], "costing": "motorcycle",
+            "date_time": {"type": 1, "value": "2026-10-10T08:00"}}
+
+
+def timezone_problem(response: dict, expected: str) -> Optional[str]:
+    """None se todos os pontos da rota vierem com o fuso esperado; senão, o problema."""
+    names = [loc.get("time_zone_name") for loc in response["trip"]["locations"]]
+    if not all(names):
+        return f"rota com hora marcada sem fuso nos pontos: {names}"
+    wrong = sorted({n for n in names if n != expected})
+    return f"fuso {', '.join(wrong)} em vez de {expected}" if wrong else None
+
+
 def missing_packages(routes: List[RouteCheck], files: Dict[str, str]) -> List[str]:
     """Um problema por rota que precisa de um pacote que não foi gerado (em vez de um KeyError no meio)."""
     out = []
@@ -157,6 +177,19 @@ def validate(brazil_tiles: Path, packages_dir: Path, files: Dict[str, str],
             if difference > route.tolerance:
                 problems.append(f"{route.name}: {km_packages:.1f} km com os pacotes contra "
                                 f"{km_brazil:.1f} km com o Brasil")
+        if "DF" in files:
+            # Os fusos ficam dentro dos tiles: com base + DF, a rota com hora marcada tem de vir com o fuso.
+            _extract(packages_dir / files["DF"], folder)
+            try:
+                response = json.loads(engine.actor(folder).route(json.dumps(timezone_request())))
+                problem = timezone_problem(response, TIMEZONE_EXPECTED)
+            except RuntimeError as e:
+                problem = f"rota com hora marcada falhou ({e})"
+            finally:
+                _reset_to_base(folder)
+            print(f"[validar] {'ok' if problem is None else 'SEM FUSO':>9}  rota com hora marcada em Brasília")
+            if problem:
+                problems.append(problem)
         gc.collect()
     print(f"[validar] {len(routes)} rotas em {(time.time() - t0) / 60:.1f} min")
     return problems

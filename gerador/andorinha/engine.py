@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict, Optional, Tuple
 
 from . import config
 
@@ -67,13 +67,14 @@ def exe(bin_dir: Path, name: str) -> str:
     raise FileNotFoundError(f"{name} não encontrado em {bin_dir}")
 
 
-def config_build(tiles_dir: Path, admins: Path) -> dict:
-    """A config do build. Sem trânsito, fusos horários, transporte público e pontos de referência: o pacote é só o
-    grafo de rotas. Sem `default_speeds_config`: as velocidades vêm do `maxspeed` do OSM e das regras por tipo de via
+def config_build(tiles_dir: Path, admins: Path, timezones: Optional[Path] = None) -> dict:
+    """A config do build. Com os fusos horários (`timezones`, o banco de andorinha/timezones.py: cada nó leva o fuso,
+    e rota com `date_time` responde com hora e fuso); sem trânsito, transporte público e pontos de referência. Sem `default_speeds_config`: as velocidades vêm do `maxspeed` do OSM e das regras por tipo de via
     do próprio Valhalla (uma tabela de velocidades por densidade deixou a cidade com metade da velocidade real num
     teste no DF, ver gerador/README.md)."""
     cfg = import_valhalla().get_config(tile_extract="", tile_dir=str(tiles_dir), verbose=True)
-    cfg["mjolnir"].update(traffic_extract="", timezone="", transit_dir="", landmarks="", admin=str(admins),
+    cfg["mjolnir"].update(traffic_extract="", timezone=str(timezones) if timezones else "", transit_dir="",
+                          landmarks="", admin=str(admins),
                           concurrency=config.THREADS)
     return cfg
 

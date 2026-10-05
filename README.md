@@ -132,6 +132,7 @@ required_config    ajustes obrigatórios na config do Valhalla de quem usa os pa
 osm                data (timestamp), md5 e endereço (url) do extrato do OpenStreetMap usado
 release_url        onde baixar os arquivos desta geração
 attribution        crédito obrigatório dos dados
+timezones          fusos horários dentro dos tiles: release do timezone-boundary-builder e as zonas (as 16 do Brasil)
 base               o pacote base (campos abaixo)
 states             {UF: pacote}, um por estado (campos abaixo)
   name             nome do estado (só em states)
@@ -150,6 +151,10 @@ states             {UF: pacote}, um por estado (campos abaixo)
 Desde as gerações seguintes a 2026-10-05, cada pacote sai também em **`.tar.zst`** (zstd nível 19, janela de 8 MB),
 com o mesmo tar do `.tar.gz` dentro: cerca de 15% menor e mais rápido de descompactar, com pouca memória (bom para
 celular). Quem lê zstd baixa o `zstd.file`; quem não lê segue no `file` (`.tar.gz`), que continua igual.
+
+Desde as gerações seguintes a 2026-10-05, os tiles levam o **fuso horário** de cada cruzamento (as 16 zonas do
+Brasil): uma rota pedida com `date_time` (hora de partida ou de chegada) responde com a hora de cada ponto e o
+fuso (`time_zone_name`, `time_zone_offset`). Não há arquivo a mais para baixar.
 
 Hoje, `required_config` é `{"loki.use_connectivity": false, "service_limits.motorcycle.max_distance": 5000000}`
 (ver "Viagens longas"). Quem usa os pacotes pode aplicar essas chaves direto na config do Valhalla.

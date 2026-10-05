@@ -12,7 +12,7 @@ from andorinha import catalog, config, engine  # noqa: E402
 from andorinha.packing import Package, polygon_bbox  # noqa: E402
 
 TOP_LEVEL_KEYS = {"schema", "build_id", "built_at", "valhalla_version", "generator_commit", "required_config", "osm",
-                  "release_url", "attribution", "base", "states"}
+                  "release_url", "attribution", "timezones", "base", "states"}
 PACKAGE_KEYS = {"file", "bytes", "sha256", "tiles", "bytes_tiles", "bbox", "bbox_tiles", "zstd"}
 MD5 = "cb859dc31c5fb8459735f0cd273d2c4f"
 OSM = {"path": "brazil-latest.osm.pbf", "url": "https://exemplo/brazil-latest.osm.pbf",

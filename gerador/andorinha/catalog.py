@@ -10,6 +10,7 @@
       "osm": {"timestamp": ..., "md5": ..., "url": ...},
       "release_url": "https://github.com/Murkiriel/andorinha/releases/download/2026-09-30-cb859dc3/",
       "attribution": "...",
+      "timezones": {"release": "2026d", "tzids": [...]},   fusos dentro dos tiles (as zonas do Brasil)
       "base": {"file", "bytes", "sha256", "tiles", "bytes_tiles", "bbox", "bbox_tiles"},
       "states": {"GO": {"name": "Goiás", ...os mesmos campos}, ...}
     }
@@ -27,7 +28,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Optional
 
-from . import config, engine
+from . import config, engine, timezones
 from .packing import Package
 
 SCHEMA = 1
@@ -38,6 +39,12 @@ def _entry(p: Package) -> dict:
     d.pop("name")
     d["bytes"] = d.pop("size")
     return d
+
+
+def timezones_entry() -> dict:
+    """De onde vêm os fusos dos tiles: a release do timezone-boundary-builder e as zonas incluídas (as do Brasil).
+    Rota com `date_time` só responde com hora e fuso onde o nó tem uma dessas zonas."""
+    return {"release": config.TIMEZONE_RELEASE, "tzids": sorted(timezones.BRAZIL_TZIDS)}
 
 
 def build_id(data: str, extract_md5: str) -> str:
@@ -68,6 +75,7 @@ def build_catalog(build_id: str, osm: Dict[str, object], packages: Dict[str, Pac
         "osm": {"timestamp": osm["timestamp"], "md5": osm["md5"], "url": osm["url"]},
         "release_url": config.RELEASE_URL.format(tag=build_id),
         "attribution": config.ATTRIBUTION,
+        "timezones": timezones_entry(),
         "base": _entry(packages["base"]),
         "states": {state: {"name": config.STATES[state], **_entry(packages[state])}
                    for state in sorted(packages) if state != "base"},

@@ -53,6 +53,11 @@ MAX_ASSET_BYTES = 1_900_000_000
 # Nível do .tar.zst de cada pacote. O 19 com a janela padrão (8 MB) dá ~15% menos que o .tar.gz; níveis maiores
 # e janelas maiores quase não ganham (medido em 2026-10-05) e pedem mais memória para descompactar no celular.
 ZSTD_LEVEL = 19
+# Fusos horários dos tiles (andorinha/timezones.py): release fixada do timezone-boundary-builder, a fonte do
+# valhalla_build_timezones. Trocar de release muda os tiles só onde uma fronteira de fuso mudou.
+TIMEZONE_RELEASE = "2026d"
+TIMEZONE_URL = ("https://github.com/evansiroky/timezone-boundary-builder/releases/download/{release}/"
+                "timezones-with-oceans.geojson.zip")
 
 # O repositório das releases: ANDORINHA_REPO, senão o do GitHub Actions (GITHUB_REPOSITORY, que ele define sozinho),
 # senão o público. Assim um repositório de teste publica e aponta os links para ele mesmo.
