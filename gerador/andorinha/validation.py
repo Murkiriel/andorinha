@@ -134,8 +134,11 @@ def _km(tiles_dir: Path, route: RouteCheck) -> float:
 
 
 def _extract(package: Path, dest: Path) -> None:
-    with tarfile.open(package, "r:gz") as tar:
-        tar.extractall(dest, filter="data")
+    import zstandard
+
+    with open(package, "rb") as f, zstandard.ZstdDecompressor().stream_reader(f) as stream:
+        with tarfile.open(fileobj=stream, mode="r|") as tar:
+            tar.extractall(dest, filter="data")
 
 
 def _reset_to_base(folder: Path) -> None:

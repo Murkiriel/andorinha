@@ -9,7 +9,7 @@ REPO = GENERATOR_DIR.parent
 DATA = GENERATOR_DIR / "data"
 RAW = DATA / "raw"        # extrato do OpenStreetMap e malha do IBGE
 BUILD = DATA / "build"    # tiles soltos e bancos auxiliares do Valhalla
-DIST = DATA / "dist"      # pacotes .tar.gz e o catalogo.json desta geração
+DIST = DATA / "dist"      # pacotes .tar.zst e o catalogo.json desta geração
 
 # Versão do Valhalla que gera os tiles. TEM de ser a mesma do motor que vai lê-los: o formato do tile muda entre
 # versões (o cabeçalho mudou na 3.8). 3.6.3 é a embutida no valhalla-mobile 0.6.x, a biblioteca Android/iOS.

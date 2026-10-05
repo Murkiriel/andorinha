@@ -94,3 +94,20 @@ class MissingPackagesTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ExtractTest(unittest.TestCase):
+    def test_a_zstd_package_extracts_for_the_test_routes(self):
+        """A validação monta os pacotes .tar.zst numa pasta, como quem os usa."""
+        import tempfile
+        from andorinha.packing import write_package
+        from andorinha.tiles import Tile
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp) / "tiles"
+            t = Tile(2, 426768)
+            (folder / t.path()).parent.mkdir(parents=True, exist_ok=True)
+            (folder / t.path()).write_bytes(b"tile")
+            write_package("AA", [t], folder, Path(tmp) / "andorinha-AA.tar.zst")
+            out = Path(tmp) / "out"
+            validation._extract(Path(tmp) / "andorinha-AA.tar.zst", out)
+            self.assertEqual(b"tile", (out / t.path()).read_bytes())

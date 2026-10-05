@@ -65,7 +65,7 @@ novo, somar o download de 2,3 GB (25 min numa conexão de ~1,5 MB/s).
 |---|---|---|
 | osm | `andorinha/sources.py` | Baixa o extrato do Brasil do openstreetmap.fr quando há versão nova e confere o md5 publicado. Se o site troca o extrato durante o download (uma vez por dia), lê o md5 de novo e baixa a versão nova uma vez |
 | tiles | `andorinha/builder.py` | Roda `valhalla_build_admins` e `valhalla_build_tiles` do pyvalhalla, com 8 threads (config e executáveis vêm do `engine.py`), com o banco de fusos só do Brasil de `andorinha/timezones.py` (desde 2026-10-05; precisa do SpatiaLite, `mod_spatialite`) |
-| packages | `andorinha/packing.py` | Divide os tiles em base (nível 0) e um pacote por UF (níveis 1 e 2), pela malha do IBGE, e grava os `.tar.gz` e, com o mesmo tar, os `.tar.zst` (zstd 19, desde 2026-10-05) |
+| packages | `andorinha/packing.py` | Divide os tiles em base (nível 0) e um pacote por UF (níveis 1 e 2), pela malha do IBGE, e grava os `.tar.zst` (zstd 19; até 2026-10-05, `.tar.gz`) |
 | validate | `andorinha/validation.py` | 33 rotas, cada uma só com a base e as UFs dela instaladas, comparadas com a rota do Brasil inteiro. O foco é a moto, com 30: uma dentro de cada UF (capital -> cidade de 25 a 140 km), duas entre UFs vizinhas e Porto Alegre -> Fortaleza só com os pacotes das pontas. Carro, bicicleta e a pé têm uma rota curta cada, dentro de uma UF. Leva ~1 min |
 | catalog | `andorinha/catalog.py` | Monta o `catalogo.json` com tamanho, sha256, bbox e contagem de tiles de cada pacote |
 

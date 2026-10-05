@@ -77,7 +77,7 @@ para um motor 3.6.3, nem os atuais para um motor 3.9.
 ```
 curl -LO https://github.com/Murkiriel/andorinha/releases/download/<build_id>/andorinha-base.tar.gz
 curl -LO https://github.com/Murkiriel/andorinha/releases/download/<build_id>/andorinha-GO.tar.gz
-mkdir tiles && tar -xzf andorinha-base.tar.gz -C tiles && tar -xzf andorinha-GO.tar.gz -C tiles
+mkdir tiles && tar --zstd -xf andorinha-base.tar.zst -C tiles && tar --zstd -xf andorinha-GO.tar.zst -C tiles
 ```
 
 ```python
@@ -115,8 +115,8 @@ dá a mesma rota do Brasil inteiro (4.242 km).
 
 | Pacote | Conteúdo |
 |---|---|
-| `andorinha-base.tar.gz` | Nível 0 do Valhalla: motorway, trunk e primary do Brasil inteiro (quadrados de 4°) |
-| `andorinha-<UF>.tar.gz` | Níveis 1 (secondary e tertiary, quadrados de 1°) e 2 (demais vias, quadrados de 0,25°) que tocam a UF, pela malha oficial do IBGE com ~5 km de margem |
+| `andorinha-base.tar.zst` | Nível 0 do Valhalla: motorway, trunk e primary do Brasil inteiro (quadrados de 4°) |
+| `andorinha-<UF>.tar.zst` | Níveis 1 (secondary e tertiary, quadrados de 1°) e 2 (demais vias, quadrados de 0,25°) que tocam a UF, pela malha oficial do IBGE com ~5 km de margem |
 
 Tamanho, sha256, número de tiles e retângulo de cada pacote estão no `catalogo.json`.
 
@@ -145,12 +145,11 @@ states             {UF: pacote}, um por estado (campos abaixo)
                    [lat mín, lon mín, lat máx, lon máx], arredondado para fora; use para escolher o que baixar
   bbox_tiles       área coberta pelos tiles do pacote: em geral maior que o bbox (os tiles de 1° e 4° passam da
                    divisa), mas menor onde a UF não tem via (ilhas oceânicas, extremo norte da Amazônia)
-  zstd             o mesmo pacote em .tar.zst, quando a geração tem: {"file", "bytes", "sha256"}, como acima
 ```
 
-Desde as gerações seguintes a 2026-10-05, cada pacote sai também em **`.tar.zst`** (zstd nível 19, janela de 8 MB),
-com o mesmo tar do `.tar.gz` dentro: cerca de 15% menor e mais rápido de descompactar, com pouca memória (bom para
-celular). Quem lê zstd baixa o `zstd.file`; quem não lê segue no `file` (`.tar.gz`), que continua igual.
+Os pacotes são **`.tar.zst`** (zstd nível 19, janela de 8 MB): cerca de 15% menores que o `.tar.gz` de antes e mais
+rápidos de descompactar, com pouca memória (num celular, o pacote do DF abriu em 0,27 s). Até 2026-10-05 eram
+`.tar.gz`; a geração `2026-10-05-93a54bc6` saiu com os dois formatos e a chave `zstd` em cada pacote do catálogo.
 
 Desde as gerações seguintes a 2026-10-05, os tiles levam o **fuso horário** de cada cruzamento (as 16 zonas do
 Brasil): uma rota pedida com `date_time` (hora de partida ou de chegada) responde com a hora de cada ponto e o

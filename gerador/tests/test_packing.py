@@ -52,25 +52,8 @@ class DistributeTest(unittest.TestCase):
 
 class WritePackageTest(unittest.TestCase):
     def test_reproducible_package_with_tile_paths(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            folder = Path(tmp) / "tiles"
-            tiles = [Tile(2, 426768), Tile(1, 26772)]
-            for t in tiles:
-                (folder / t.path()).parent.mkdir(parents=True, exist_ok=True)
-                (folder / t.path()).write_bytes(b"tile " + t.path().encode())
-            a = write_package("AA", tiles, folder, Path(tmp) / "a.tar.gz")
-            b = write_package("AA", list(reversed(tiles)), folder, Path(tmp) / "b.tar.gz")
-            self.assertEqual(a.sha256, b.sha256)  # mesma entrada, mesmo arquivo byte a byte
-            self.assertEqual(2, a.tiles)
-            with tarfile.open(Path(tmp) / "a.tar.gz", "r:gz") as tar:
-                self.assertEqual(["1/026/772.gph", "2/000/426/768.gph"], tar.getnames())
-            with gzip.open(Path(tmp) / "a.tar.gz") as gz:
-                gz.read()  # gzip válido
-
-    def test_zstd_twin_holds_the_same_tar(self):
-        """Ao lado de cada .tar.gz sai um .tar.zst (zstd 19, janela padrão: pouca memória para descompactar no
-        celular) com o mesmo tar dentro, byte a byte, também reproduzível; o catálogo leva arquivo, tamanho e
-        sha256 dele."""
+        """Desde 2026-10-05 (decisão do dono, depois do teste num celular) o pacote é só o .tar.zst: zstd 19, janela
+        padrão (pouca memória para descompactar no celular), reproduzível byte a byte."""
         import zstandard
         from andorinha.util import file_hash
         with tempfile.TemporaryDirectory() as tmp:
@@ -78,22 +61,28 @@ class WritePackageTest(unittest.TestCase):
             tiles = [Tile(2, 426768), Tile(1, 26772)]
             for t in tiles:
                 (folder / t.path()).parent.mkdir(parents=True, exist_ok=True)
-                (folder / t.path()).write_bytes(b"tile " + t.path().encode() * 50)
-            a = write_package("AA", tiles, folder, Path(tmp) / "andorinha-AA.tar.gz")
-            zst = Path(tmp) / "andorinha-AA.tar.zst"
-            self.assertTrue(zst.exists(), "falta o .tar.zst ao lado do .tar.gz")
-            self.assertEqual({"file": zst.name, "bytes": zst.stat().st_size, "sha256": file_hash(zst)}, a.zstd)
-            with gzip.open(Path(tmp) / "andorinha-AA.tar.gz") as gz:
-                tar_from_gz = gz.read()
-            with open(zst, "rb") as f:
-                tar_from_zst = zstandard.ZstdDecompressor().stream_reader(f).read()
-            self.assertEqual(tar_from_gz, tar_from_zst)
-            params = zstandard.get_frame_parameters(zst.read_bytes())
-            self.assertLessEqual(params.window_size, 8 * 1024 * 1024)
+                (folder / t.path()).write_bytes(b"tile " + t.path().encode())
+            a = write_package("AA", tiles, folder, Path(tmp) / "a.tar.zst")
             (Path(tmp) / "b").mkdir()
-            b = write_package("AA", list(reversed(tiles)), folder, Path(tmp) / "b" / "andorinha-AA.tar.gz")
-            self.assertEqual(a.zstd["sha256"], b.zstd["sha256"])
-            self.assertFalse((Path(tmp) / "andorinha-AA.tar").exists())  # o tar aberto não fica na pasta
+            b = write_package("AA", list(reversed(tiles)), folder, Path(tmp) / "b" / "a.tar.zst")
+            self.assertEqual(a.sha256, b.sha256)  # mesma entrada, mesmo arquivo byte a byte
+            self.assertEqual(2, a.tiles)
+            zst = Path(tmp) / "a.tar.zst"
+            self.assertEqual(("a.tar.zst", zst.stat().st_size, file_hash(zst)), (a.file, a.size, a.sha256))
+            with open(zst, "rb") as f, zstandard.ZstdDecompressor().stream_reader(f) as stream:
+                with tarfile.open(fileobj=stream, mode="r|") as tar:
+                    self.assertEqual(["1/026/772.gph", "2/000/426/768.gph"], [m.name for m in tar])
+            self.assertLessEqual(zstandard.get_frame_parameters(zst.read_bytes()).window_size, 8 * 1024 * 1024)
+
+    def test_only_the_zstd_file_is_written(self):
+        """Nem .tar.gz ao lado, nem o tar aberto: só o .tar.zst."""
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp) / "tiles"
+            t = Tile(2, 426768)
+            (folder / t.path()).parent.mkdir(parents=True, exist_ok=True)
+            (folder / t.path()).write_bytes(b"tile")
+            write_package("AA", [t], folder, Path(tmp) / "andorinha-AA.tar.zst")
+            self.assertEqual(["andorinha-AA.tar.zst", "tiles"], sorted(p.name for p in Path(tmp).iterdir()))
 
     def test_clean_output_also_removes_old_zstd(self):
         from andorinha.packing import clean_output

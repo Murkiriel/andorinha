@@ -13,16 +13,15 @@ from andorinha.packing import Package, polygon_bbox  # noqa: E402
 
 TOP_LEVEL_KEYS = {"schema", "build_id", "built_at", "valhalla_version", "generator_commit", "required_config", "osm",
                   "release_url", "attribution", "timezones", "base", "states"}
-PACKAGE_KEYS = {"file", "bytes", "sha256", "tiles", "bytes_tiles", "bbox", "bbox_tiles", "zstd"}
+PACKAGE_KEYS = {"file", "bytes", "sha256", "tiles", "bytes_tiles", "bbox", "bbox_tiles"}
 MD5 = "cb859dc31c5fb8459735f0cd273d2c4f"
 OSM = {"path": "brazil-latest.osm.pbf", "url": "https://exemplo/brazil-latest.osm.pbf",
        "timestamp": "2026-09-29T00:59:51Z", "md5": MD5, "size": 123}
 
 
 def package(name, bbox, bbox_tiles):
-    return Package(name=name, file=f"andorinha-{name}.tar.gz", size=1000, sha256="a" * 64, tiles=10,
-                   bytes_tiles=3000, bbox=bbox, bbox_tiles=bbox_tiles,
-                   zstd={"file": f"andorinha-{name}.tar.zst", "bytes": 850, "sha256": "b" * 64})
+    return Package(name=name, file=f"andorinha-{name}.tar.zst", size=1000, sha256="a" * 64, tiles=10,
+                   bytes_tiles=3000, bbox=bbox, bbox_tiles=bbox_tiles)
 
 
 def fake_catalog():
@@ -68,11 +67,8 @@ class ContractTest(unittest.TestCase):
                 self.assertIsInstance(entry[key], int)
             for key in ("bbox", "bbox_tiles"):
                 self.assertEqual(4, len(entry[key]))
-            # O mesmo pacote em zstd (2026-10-05): menor e mais rápido de descompactar no celular. Chave nova; quem
-            # não a conhece segue no .tar.gz.
-            self.assertEqual({"file", "bytes", "sha256"}, set(entry["zstd"]))
-            self.assertTrue(entry["zstd"]["file"].endswith(".tar.zst"))
-            self.assertIsInstance(entry["zstd"]["bytes"], int)
+            # Desde 2026-10-05 o pacote é só o .tar.zst (houve uma geração com os dois e a chave `zstd`).
+            self.assertTrue(entry["file"].endswith(".tar.zst"))
 
     def test_build_id_has_date_and_extract_md5(self):
         self.assertEqual("2026-09-30-cb859dc3", catalog.build_id("2026-09-30", MD5))
