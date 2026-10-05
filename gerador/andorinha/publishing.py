@@ -213,6 +213,16 @@ def flags_problem(release: bool, commit: bool, push: bool, prune: bool = False,
 MAX_DROP = 0.05
 
 
+def package_files(cat: dict) -> List[str]:
+    """Os arquivos que sobem na release: o .tar.gz de cada pacote e, quando o catálogo traz, o .tar.zst."""
+    out = []
+    for e in entries(cat).values():
+        out.append(e["file"])
+        if e.get("zstd"):
+            out.append(e["zstd"]["file"])
+    return out
+
+
 def entries(cat: dict) -> dict:
     """{'base': {...}, 'GO': {...}, ...}: todos os pacotes do catálogo."""
     return {"base": cat["base"], **cat["states"]}
@@ -240,13 +250,14 @@ def check(cat: dict, published: Optional[dict], accept_drop: bool, accept_older:
         problems.append(f"catálogo gerado com o Valhalla {cat['valhalla_version']}, "
                         f"gerador em {config.VALHALLA_VERSION}")
     for name, e in entries(cat).items():
-        file = config.DIST / e["file"]
-        if not file.exists():
-            problems.append(f"{name}: falta {e['file']}")
-        elif file.stat().st_size >= config.MAX_ASSET_BYTES:
-            problems.append(f"{name}: {file.stat().st_size / 1e9:.2f} GB, acima do limite do GitHub Releases")
-        elif file_hash(file) != e["sha256"]:
-            problems.append(f"{name}: sha256 de {e['file']} não bate com o catálogo")
+        for item in [e] + ([e["zstd"]] if e.get("zstd") else []):
+            file = config.DIST / item["file"]
+            if not file.exists():
+                problems.append(f"{name}: falta {item['file']}")
+            elif file.stat().st_size >= config.MAX_ASSET_BYTES:
+                problems.append(f"{name}: {file.stat().st_size / 1e9:.2f} GB, acima do limite do GitHub Releases")
+            elif file_hash(file) != item["sha256"]:
+                problems.append(f"{name}: sha256 de {item['file']} não bate com o catálogo")
     if published and not accept_drop:
         problems += drops(published, cat)
     if not accept_older:

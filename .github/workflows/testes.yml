@@ -22,6 +22,6 @@ jobs:
         with:
           python-version: "3.12"
       - name: Dependências dos testes
-        run: pip install shapely==2.1.2
+        run: pip install shapely==2.1.2 zstandard==0.25.0
       - name: Testes
         run: python -m unittest discover -s tests -t . -v

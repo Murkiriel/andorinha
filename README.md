@@ -144,7 +144,12 @@ states             {UF: pacote}, um por estado (campos abaixo)
                    [lat mín, lon mín, lat máx, lon máx], arredondado para fora; use para escolher o que baixar
   bbox_tiles       área coberta pelos tiles do pacote: em geral maior que o bbox (os tiles de 1° e 4° passam da
                    divisa), mas menor onde a UF não tem via (ilhas oceânicas, extremo norte da Amazônia)
+  zstd             o mesmo pacote em .tar.zst, quando a geração tem: {"file", "bytes", "sha256"}, como acima
 ```
+
+Desde as gerações seguintes a 2026-10-05, cada pacote sai também em **`.tar.zst`** (zstd nível 19, janela de 8 MB),
+com o mesmo tar do `.tar.gz` dentro: cerca de 15% menor e mais rápido de descompactar, com pouca memória (bom para
+celular). Quem lê zstd baixa o `zstd.file`; quem não lê segue no `file` (`.tar.gz`), que continua igual.
 
 Hoje, `required_config` é `{"loki.use_connectivity": false, "service_limits.motorcycle.max_distance": 5000000}`
 (ver "Viagens longas"). Quem usa os pacotes pode aplicar essas chaves direto na config do Valhalla.

@@ -1,3 +1,4 @@
 # Versões fixas. pyvalhalla TEM de ser a versão do Valhalla que vai ler os tiles (andorinha/config.py).
 pyvalhalla==3.6.3
+zstandard==0.25.0  # o .tar.zst de cada pacote, ao lado do .tar.gz
 shapely==2.1.2     # em que UF cai cada tile, pela malha do IBGE

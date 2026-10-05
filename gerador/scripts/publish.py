@@ -113,7 +113,7 @@ def main() -> None:
         return
 
     tag = cat["build_id"]
-    files = [config.DIST / e["file"] for e in packages.values()]
+    files = [config.DIST / name for name in publishing.package_files(cat)]
     notes = (f"Tiles de roteamento do Valhalla {cat['valhalla_version']} para o Brasil, OpenStreetMap de "
              f"{cat['osm']['timestamp']}. Índice: catalogo.json na raiz do repositório.\n\n{config.ATTRIBUTION}")
     try:

@@ -50,6 +50,9 @@ KEEP_GENERATIONS = int(os.environ.get("ANDORINHA_KEEP_GENERATIONS") or 3)
 
 # O GitHub Releases recusa arquivo a partir de 2 GiB; esta é a trava, com folga.
 MAX_ASSET_BYTES = 1_900_000_000
+# Nível do .tar.zst de cada pacote. O 19 com a janela padrão (8 MB) dá ~15% menos que o .tar.gz; níveis maiores
+# e janelas maiores quase não ganham (medido em 2026-10-05) e pedem mais memória para descompactar no celular.
+ZSTD_LEVEL = 19
 
 # O repositório das releases: ANDORINHA_REPO, senão o do GitHub Actions (GITHUB_REPOSITORY, que ele define sozinho),
 # senão o público. Assim um repositório de teste publica e aponta os links para ele mesmo.

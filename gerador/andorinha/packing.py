@@ -8,6 +8,10 @@
 Os tiles de um pacote apontam para os dos vizinhos, então todos os pacotes instalados juntos precisam ser da mesma
 geração (o `build_id` do catálogo). Cada pacote é um .tar.gz com os caminhos relativos à pasta de tiles: basta
 extrair todos na mesma pasta e apontar o `mjolnir.tile_dir` do Valhalla para ela.
+
+Desde 2026-10-05 o mesmo tar sai também em .tar.zst (zstd nível 19, janela padrão de 8 MB): ~15% menor que o
+.tar.gz e mais rápido de descompactar, inclusive num celular, com pouca memória. O .tar.gz continua, para quem
+ainda não lê zstd.
 """
 from __future__ import annotations
 
@@ -15,6 +19,7 @@ import gzip
 import io
 import json
 import math
+import shutil
 import tarfile
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -79,6 +84,7 @@ class Package:
     bytes_tiles: int
     bbox: List[float] = field(default_factory=list)
     bbox_tiles: List[float] = field(default_factory=list)
+    zstd: Optional[Dict[str, object]] = None  # {file, bytes, sha256} do .tar.zst com o mesmo tar
 
 
 def _bbox_tiles(tiles: List[Tile]) -> List[float]:
@@ -96,29 +102,42 @@ def polygon_bbox(geometry) -> List[float]:
 
 def write_package(name: str, tiles: List[Tile], tiles_dir: Path, dest: Path,
                   bbox: Optional[List[float]] = None) -> Package:
-    """Grava o .tar.gz de um pacote, de forma reproduzível (ordem fixa, datas zeradas): o mesmo conjunto de tiles
-    gera sempre o mesmo arquivo, byte a byte (o gzip não guarda nome nem data)."""
+    """Grava o .tar.gz de um pacote e o .tar.zst ao lado (`dest` termina em .tar.gz), de forma reproduzível (ordem
+    fixa, datas zeradas): o mesmo conjunto de tiles gera sempre os mesmos arquivos, byte a byte (nem o gzip nem o
+    zstd guardam nome ou data). O tar aberto é gravado uma vez, numa pasta temporária, e sai dos dois."""
+    import tempfile
+
+    import zstandard
+
     tiles = sorted(tiles)
     bytes_tiles = 0
-    with open(dest, "wb") as raw_file:
-        with gzip.GzipFile(filename="", fileobj=raw_file, mode="wb", compresslevel=6, mtime=0) as gz:
-            with tarfile.open(fileobj=gz, mode="w", format=tarfile.USTAR_FORMAT) as tar:
-                for t in tiles:
-                    data = (tiles_dir / t.path()).read_bytes()
-                    bytes_tiles += len(data)
-                    info = tarfile.TarInfo(t.path())
-                    info.size = len(data)
-                    info.mtime = 0
-                    info.mode = 0o644
-                    tar.addfile(info, io.BytesIO(data))
+    zst = dest.with_name(dest.name[: -len(".gz")] + ".zst")
+    with tempfile.TemporaryDirectory(prefix="andorinha-tar-", dir=dest.parent) as tmp:
+        plain = Path(tmp) / "pacote.tar"
+        with tarfile.open(plain, mode="w", format=tarfile.USTAR_FORMAT) as tar:
+            for t in tiles:
+                data = (tiles_dir / t.path()).read_bytes()
+                bytes_tiles += len(data)
+                info = tarfile.TarInfo(t.path())
+                info.size = len(data)
+                info.mtime = 0
+                info.mode = 0o644
+                tar.addfile(info, io.BytesIO(data))
+        with open(plain, "rb") as src, open(dest, "wb") as raw_file:
+            with gzip.GzipFile(filename="", fileobj=raw_file, mode="wb", compresslevel=6, mtime=0) as gz:
+                shutil.copyfileobj(src, gz, 1 << 20)
+        with open(plain, "rb") as src, open(zst, "wb") as out:
+            zstandard.ZstdCompressor(level=config.ZSTD_LEVEL).copy_stream(src, out)
     tiles_box = _bbox_tiles(tiles)
     return Package(name, dest.name, dest.stat().st_size, file_hash(dest), len(tiles), bytes_tiles,
-                   bbox if bbox is not None else tiles_box, tiles_box)
+                   bbox if bbox is not None else tiles_box, tiles_box,
+                   {"file": zst.name, "bytes": zst.stat().st_size, "sha256": file_hash(zst)})
 
 
 def clean_output(output: Path) -> None:
     """Apaga os pacotes, o pacotes.json e o catalogo.json da geração anterior: nada dela fica misturado com a nova."""
-    for old in [*output.glob("andorinha-*.tar.gz"), output / "pacotes.json", output / "catalogo.json"]:
+    for old in [*output.glob("andorinha-*.tar.gz"), *output.glob("andorinha-*.tar.zst"), output / "pacotes.json",
+                output / "catalogo.json"]:
         if old.exists():
             old.unlink()
 
@@ -139,7 +158,7 @@ def generate(tiles_dir: Path, mesh: Path, output: Path) -> Dict[str, Package]:
     out: Dict[str, Package] = {}
     for name in ["base"] + sorted(k for k in packages if k != "base"):
         p = write_package(name, packages[name], tiles_dir, output / f"andorinha-{name}.tar.gz", boxes[name])
-        if p.size >= config.MAX_ASSET_BYTES:
+        if max(p.size, int(p.zstd["bytes"]) if p.zstd else 0) >= config.MAX_ASSET_BYTES:
             raise RuntimeError(f"pacote {name} tem {p.size / 1e9:.2f} GB, acima do limite do GitHub Releases")
         print(f"[pacotes] {name:>4}: {p.tiles:5d} tiles, {p.bytes_tiles / 1e6:7.1f} MB -> {p.size / 1e6:7.1f} MB")
         out[name] = p
